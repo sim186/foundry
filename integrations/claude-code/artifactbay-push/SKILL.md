@@ -22,7 +22,11 @@ checkout creates a new **version** automatically (it remembers the session id in
 
 First, set `CLI` to the bundled script's absolute path (it sits beside this SKILL.md):
 ```bash
-CLI="$CLAUDE_PLUGIN_ROOT/artifactbay_cli.py"   # or the absolute path to artifactbay_cli.py in this skill dir
+# Installed as a plugin: $CLAUDE_PLUGIN_ROOT points at this dir.
+# Installed as a skill (~/.claude/skills/ or .claude/skills/): that var is UNSET —
+# use the literal path to artifactbay_cli.py in this skill's directory instead.
+CLI="${CLAUDE_PLUGIN_ROOT:-$HOME/.claude/skills/artifactbay-push}/artifactbay_cli.py"
+[ -f "$CLI" ] || echo "set CLI to the absolute path of artifactbay_cli.py beside this SKILL.md"
 ```
 
 ## Steps
@@ -53,7 +57,9 @@ CLI="$CLAUDE_PLUGIN_ROOT/artifactbay_cli.py"   # or the absolute path to artifac
    ```
 
 ## Config (env)
-- `ARTIFACTBAY_URL` — ArtifactBay base URL (default `http://localhost:8080`)
+- `ARTIFACTBAY_URL` — ArtifactBay base URL (default `http://localhost:8080`). For a self-hosted
+  instance set the full origin, e.g. `https://artifacts.example.com` (no trailing slash). TLS must
+  be valid — the CLI verifies certs and has no insecure/skip-verify flag.
 - `ARTIFACTBAY_KEY` — write API key (**required**; never hardcode/commit it)
 - `ARTIFACTBAY_PROJECT`, `ARTIFACTBAY_TAGS` (comma-sep), `ARTIFACTBAY_MODEL` — optional metadata
 
@@ -61,3 +67,8 @@ CLI="$CLAUDE_PLUGIN_ROOT/artifactbay_cli.py"   # or the absolute path to artifac
 - Never put `ARTIFACTBAY_KEY` in a committed file — use the environment.
 - Don't push secrets. Only files under `.artifactbay/artifacts/` are sent (plus git repo/branch/commit strings).
 - Don't auto-push unless the user opted into the Stop hook (see `../stop-hook.md`).
+
+## Notes
+- The session is cached in `.artifactbay/session_id` so re-pushes become versions. If you point at a
+  **different server** (or its DB was reset) the cached id won't exist there; the CLI detects that
+  (versions → 404) and transparently creates a fresh session. Delete the file to force a new session.

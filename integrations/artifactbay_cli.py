@@ -158,11 +158,17 @@ def _send(c: dict, payload: dict, idem: str) -> dict:
     body = json.dumps(payload).encode()
     if sid_file.is_file():  # known session → new version
         sid = sid_file.read_text().strip()
-        _, out = _req("POST", f"{c['url']}/v0/sessions/{sid}/versions", key=c["key"], body=body)
-    else:  # first push → create
-        _, out = _req("POST", f"{c['url']}/v0/sessions", key=c["key"], body=body, idem=idem)
-        c["state_dir"].mkdir(exist_ok=True)
-        sid_file.write_text(out["id"])
+        try:
+            _, out = _req("POST", f"{c['url']}/v0/sessions/{sid}/versions", key=c["key"], body=body)
+            return out
+        except urllib.error.HTTPError as e:
+            if e.code != 404:
+                raise
+            # stale session_id (e.g. pointed at a different server or a reset DB) →
+            # fall through to create a fresh session instead of failing.
+    _, out = _req("POST", f"{c['url']}/v0/sessions", key=c["key"], body=body, idem=idem)
+    c["state_dir"].mkdir(exist_ok=True)
+    sid_file.write_text(out["id"])
     return out
 
 

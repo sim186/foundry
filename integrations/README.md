@@ -6,7 +6,7 @@ How AI agents push sessions to ArtifactBay. Protocol spec: `../docs/02-agent-int
 Stdlib-only Python (no `pip install`) so it drops into any agent's shell.
 
 ```bash
-export ARTIFACTBAY_URL=http://localhost:8080
+export ARTIFACTBAY_URL=http://localhost:8080   # self-hosted: full origin, e.g. https://artifacts.example.com (valid TLS — no skip-verify)
 export ARTIFACTBAY_KEY=ab_...          # write key — keep in env, never commit
 
 python3 artifactbay_cli.py doctor       # check connectivity + auth + artifacts
@@ -20,7 +20,8 @@ python3 artifactbay_cli.py push --dry-run
   `ARTIFACTBAY_ALLOW_SCRIPTS="deck.html,*.slides.html"` (comma globs). Matching HTML gets
   `allow_scripts=true` so it runs in the sandboxed iframe. Default: scripts off.
 - Reads git repo/branch/commit automatically.
-- Remembers the session in `.artifactbay/session_id` → re-push = new **version**.
+- Remembers the session in `.artifactbay/session_id` → re-push = new **version**. (Different server /
+  reset DB? The cached id won't exist there — the CLI detects the 404 and creates a fresh session.)
 - **Idempotent** (Idempotency-Key) and **fail-open** (never crashes the agent; queues to `.artifactbay/pending/`).
 
 ## Trigger model
