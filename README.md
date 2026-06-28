@@ -1,8 +1,6 @@
 # Foundry &nbsp;<img src="web/public/favicon.svg" alt="" height="28" align="absmiddle" />
 
-Session-centric artifact repository for AI coding agents. See `docs/` for specs.
-
-The mark — **Molten Ember**: a cool indigo vault (the repository) holding a molten lava **F** (the freshly-forged artifact) at its core. Full lockup: [`web/public/logo.svg`](web/public/logo.svg).
+Session-centric artifact repository for AI coding agents.
 
 ## Layout
 ```
