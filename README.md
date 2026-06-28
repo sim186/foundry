@@ -1,6 +1,15 @@
-# ArtifactBay &nbsp;<img src="web/public/favicon.svg" alt="" height="28" align="absmiddle" />
+<div align="center">
+
+<img src="web/public/favicon.svg" alt="ArtifactBay" height="72" />
+
+# ArtifactBay
 
 > **The persistent home for AI agent artifacts — store, search, showcase.**
+
+<img src="images/artifactbay-home.png" alt="ArtifactBay dashboard" width="100%" />
+<img src="images/artifactbay-details.png" alt="ArtifactBay session view" width="100%" />
+
+</div>
 
 ArtifactBay is a **session-centric artifact repository** designed specifically for AI coding agents. It enables agents to push high-fidelity coding artifacts (such as HTML, markdown, SVG/PNG, PDFs, JSON, and chat logs) via a simple REST API, while giving human developers a polished, responsive dashboard to browse, search, and securely view these artifacts.
 
