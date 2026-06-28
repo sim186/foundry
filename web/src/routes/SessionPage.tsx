@@ -13,7 +13,7 @@ export function SessionPage() {
   const { sessionId } = useParams({ from: '/s/$sessionId' })
   const [version, setVersion] = useState<number | undefined>(undefined)
   const [selected, setSelected] = useState(0)
-  const [showInfo, setShowInfo] = useState(true)
+  const [showInfo, setShowInfo] = useState(false)
 
   const { data: s, isLoading, error } = useQuery({
     queryKey: ['session', sessionId, version],
